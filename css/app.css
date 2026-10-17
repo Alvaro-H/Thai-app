@@ -1,31 +1,39 @@
 :root {
-  --bg: #f8fafc;
-  --bg-elevated: #ffffff;
-  --text: #0f172a;
-  --text-dim: #475569;
-  --border: #e2e8f0;
-  --accent: #0f766e;
+  /* Paleta "laguna tropical": arena cálida, agua turquesa, selva verde, atardecer coral */
+  --bg: #fbf6ea;
+  --bg-elevated: #fffdf7;
+  --text: #16302c;
+  --text-dim: #5c7570;
+  --border: #e1dcc3;
+  --accent: #0d9488;
   --accent-text: #ffffff;
-  --danger: #b91c1c;
-  --warn: #92400e;
-  --warn-bg: #fef3c7;
-  --radius: 12px;
+  --jungle: #15803d;
+  --jungle-text: #ffffff;
+  --danger: #c0392b;
+  --warn: #c2660b;
+  --warn-bg: #fdecd3;
+  --radius: 14px;
   --gap: 12px;
+  --wave-opacity: 0.35;
   color-scheme: light dark;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0b1220;
-    --bg-elevated: #121a2b;
-    --text: #e8edf6;
-    --text-dim: #9aa7bd;
-    --border: #233049;
+    /* Laguna nocturna */
+    --bg: #081d1b;
+    --bg-elevated: #0f2b27;
+    --text: #e8f5ef;
+    --text-dim: #8fb0a6;
+    --border: #1e3d37;
     --accent: #2dd4bf;
     --accent-text: #04201c;
+    --jungle: #4ade80;
+    --jungle-text: #052e12;
     --danger: #f87171;
     --warn: #fbbf24;
     --warn-bg: #3a2c05;
+    --wave-opacity: 0.25;
   }
 }
 
@@ -59,6 +67,31 @@ body {
 .view:focus { outline: none; }
 .narrow { max-width: 560px; margin: 0 auto; }
 
+/* Pantalla de bloqueo/creación: un brote de hoja muy sutil de fondo, decorativo */
+#lock-screen {
+  position: relative;
+  min-height: 100vh;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--accent) 10%, var(--bg)) 0%, var(--bg) 55%);
+}
+#lock-screen::before {
+  content: "";
+  position: absolute;
+  top: -40px;
+  right: -60px;
+  width: 260px;
+  height: 260px;
+  background-color: var(--jungle);
+  opacity: 0.1;
+  -webkit-mask-image: url('../icons/leaf.svg');
+  mask-image: url('../icons/leaf.svg');
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  pointer-events: none;
+}
+
 /* Oculta todo el contenido al instante al pasar a segundo plano (S10) */
 #hidden-cover {
   position: fixed;
@@ -69,10 +102,29 @@ body {
 #hidden-cover:not([hidden]) ~ * { display: none !important; }
 
 .tabbar {
+  position: relative;
   display: flex;
   border-top: 1px solid var(--border);
   background: var(--bg-elevated);
   padding-bottom: env(safe-area-inset-bottom);
+}
+/* Cresta de ola decorativa justo encima de la barra de pestañas */
+.tabbar::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background-color: var(--accent);
+  opacity: var(--wave-opacity);
+  -webkit-mask-image: url('../icons/wave.svg');
+  mask-image: url('../icons/wave.svg');
+  -webkit-mask-size: 40px 8px;
+  mask-size: 40px 8px;
+  -webkit-mask-repeat: repeat-x;
+  mask-repeat: repeat-x;
+  pointer-events: none;
 }
 .tabbar button {
   flex: 1;
@@ -136,6 +188,7 @@ button, input, select, textarea {
   border-radius: var(--radius);
   padding: 14px;
   margin-bottom: var(--gap);
+  box-shadow: 0 1px 2px rgba(13, 148, 136, 0.06);
 }
 .card-title { font-weight: 600; margin-bottom: 4px; }
 .card-sub { color: var(--text-dim); font-size: 14px; }
@@ -152,7 +205,7 @@ button, input, select, textarea {
   border: 1px solid var(--border);
   color: var(--text-dim);
 }
-.pill-done { color: var(--accent); border-color: var(--accent); }
+.pill-done { color: var(--jungle-text); border-color: var(--jungle); background: var(--jungle); }
 .pill-pending { color: var(--warn); border-color: var(--warn); background: var(--warn-bg); }
 
 .warn-banner {

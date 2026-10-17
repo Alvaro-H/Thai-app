@@ -1,10 +1,12 @@
 // GENERADO por tools/build-shell-manifest.mjs — no editar a mano.
-export const CACHE_VERSION = "shell-119ba535b3f3e352";
+export const CACHE_VERSION = "shell-1ead032efee0e46f";
 export const SHELL_FILES = [
   "./css/app.css",
   "./icons/icon-192.png",
   "./icons/icon-512-maskable.png",
   "./icons/icon-512.png",
+  "./icons/leaf.svg",
+  "./icons/wave.svg",
   "./index.html",
   "./js/crypto.js",
   "./js/dom.js",
