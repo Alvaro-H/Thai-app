@@ -79,3 +79,19 @@ test('reload tras marcar check-in conserva el cambio (persistencia cifrada real)
   await page.waitForTimeout(150);
   await expect(page.locator('button:has-text("Check-in hecho")')).toBeVisible();
 });
+
+test('el interruptor día/noche cambia el tema, se recuerda al recargar y no guarda nada del viaje', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'light' });
+  await importFixture(page);
+  await expectUnlocked(page);
+  const sw = page.locator('.scene-hero .theme-switch');
+  await expect(sw).toHaveAttribute('aria-checked', 'false');
+  await sw.click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await expect(sw).toHaveAttribute('aria-checked', 'true');
+  const stored = await page.evaluate(() => JSON.stringify(Object.assign({}, localStorage)));
+  expect(stored).toBe(JSON.stringify({ 'tv-theme': 'dark' }));
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await expect(page.locator('#lock-screen .theme-switch')).toHaveAttribute('aria-checked', 'true');
+});

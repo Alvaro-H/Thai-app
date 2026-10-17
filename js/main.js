@@ -6,6 +6,9 @@ import { hasVault, createVault, unlockVault, replaceVault } from './store.js';
 import { openEnvelope, decodeJson, b64decode } from './crypto.js';
 import { getSwPolicy } from './tt-policy.js';
 import { scene } from './scene.js';
+import { applyTheme } from './theme.js';
+
+applyTheme();
 
 import { renderToday } from './views/today.js';
 import { renderItinerary, renderDay } from './views/itinerary.js';

@@ -1,5 +1,5 @@
 // GENERADO por tools/build-shell-manifest.mjs — no editar a mano.
-export const CACHE_VERSION = "shell-e086c81ec7205a61";
+export const CACHE_VERSION = "shell-8e5c4a81d5aa50ff";
 export const SHELL_FILES = [
   "./css/app.css",
   "./fonts/OFL-Kanit.txt",
@@ -11,7 +11,9 @@ export const SHELL_FILES = [
   "./icons/icon-192.png",
   "./icons/icon-512-maskable.png",
   "./icons/icon-512.png",
+  "./icons/moon.svg",
   "./icons/palm.svg",
+  "./icons/sun.svg",
   "./icons/tab-hoy.svg",
   "./icons/tab-itinerario.svg",
   "./icons/tab-listas.svg",
@@ -32,6 +34,7 @@ export const SHELL_FILES = [
   "./js/seal.js",
   "./js/session.js",
   "./js/store.js",
+  "./js/theme.js",
   "./js/tt-policy.js",
   "./js/views/apps.js",
   "./js/views/bookings.js",

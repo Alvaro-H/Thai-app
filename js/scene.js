@@ -2,6 +2,7 @@
 // palmera, mar en tres capas y un barco long-tail. Es puramente visual
 // (aria-hidden) y no contiene ningún dato del viaje.
 import { h } from './dom.js';
+import { themeSwitch } from './theme.js';
 
 export function scene(variant, ...children) {
   return h(
@@ -22,6 +23,7 @@ export function scene(variant, ...children) {
         h('div', { class: 'wave wave-front' })
       )
     ),
+    themeSwitch(),
     children.length ? h('div', { class: 'scene-text' }, ...children) : null
   );
 }

@@ -88,7 +88,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     /* La misma postal, de noche: luna sobre la laguna */
     --shallows: #071a21;
     --shell: #0d2730;
@@ -120,6 +120,41 @@
     --danger: #f97066;
   }
 }
+
+/* Elección manual desde el interruptor día/noche */
+:root[data-theme="dark"] {
+    /* La misma postal, de noche: luna sobre la laguna */
+    --shallows: #071a21;
+    --shell: #0d2730;
+    --abyss: #e4f2ef;
+    --abyss-dim: #93b3b3;
+    --reef: #1b3c45;
+    --lagoon: #3ccfc8;
+    --lagoon-soft: #10363b;
+    --marigold: #f5b651;
+    --marigold-soft: #33260c;
+    --marigold-ink: #f5c36f;
+    --jungle: #74d08f;
+    --jungle-soft: #12301d;
+    --hibiscus: #f07aa0;
+
+    --sky-top: #0a1830;
+    --sky-mid: #14365a;
+    --sky-horizon: #2c5670;
+    --sun-core: #fbf3dc;
+    --sun-edge: #e9dcb5;
+    --sea-back: #1d5a63;
+    --sea-mid: #134651;
+    --sea-front: #0c3640;
+    --palm: #04131a;
+    --boat: #02090d;
+    --stars: rgba(255, 255, 255, 0.85);
+
+    --accent-text: #03201f;
+    --danger: #f97066;
+  }
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
 
 /* --- Base ---------------------------------------------------------------- */
 
@@ -281,6 +316,67 @@ button, input, select, textarea { font-family: inherit; font-size: 16px; color: 
 }
 .scene-headline { font-family: var(--font-display); font-size: 21px; font-weight: 500; margin: 0 0 2px; }
 .scene-subline { font-size: 14px; color: color-mix(in srgb, var(--abyss) 72%, transparent); margin: 0; }
+
+/* Interruptor día/noche, sobre el cielo de la postal */
+.theme-switch {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+  width: 64px;
+  height: 34px;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, #ffffff 55%, transparent);
+  background: color-mix(in srgb, #ffffff 35%, transparent);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  cursor: pointer;
+}
+:root[data-theme="dark"] .theme-switch { background: color-mix(in srgb, #ffffff 12%, transparent); border-color: color-mix(in srgb, #ffffff 25%, transparent); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-switch { background: color-mix(in srgb, #ffffff 12%, transparent); border-color: color-mix(in srgb, #ffffff 25%, transparent); }
+}
+.theme-switch-icon {
+  position: absolute;
+  top: 8px;
+  width: 16px;
+  height: 16px;
+  background-color: var(--abyss);
+  opacity: 0.55;
+}
+.theme-switch-sun  { left: 8px;  -webkit-mask: url("../icons/sun.svg") no-repeat center / contain;  mask: url("../icons/sun.svg") no-repeat center / contain; }
+.theme-switch-moon { right: 8px; -webkit-mask: url("../icons/moon.svg") no-repeat center / contain; mask: url("../icons/moon.svg") no-repeat center / contain; }
+.theme-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 40%, #ffe3a0, var(--marigold));
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+.theme-switch[aria-checked="true"] .theme-knob {
+  transform: translateX(30px);
+  background: radial-gradient(circle at 40% 40%, #ffffff, #e9dcb5);
+}
+@media (prefers-reduced-motion: reduce) {
+  .theme-knob { transition: none; }
+}
+
+.segmented { display: flex; gap: 6px; margin-bottom: 18px; }
+.segmented button {
+  flex: 1;
+  min-height: 42px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  color: var(--text-dim);
+  cursor: pointer;
+}
+.segmented button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-text); font-weight: 600; }
 
 /* --- Hoy: relojes ------------------------------------------------------- */
 

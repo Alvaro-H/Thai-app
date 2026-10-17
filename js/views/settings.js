@@ -2,6 +2,7 @@ import { h, clear } from '../dom.js';
 import { getTripData, getKey, persist } from '../session.js';
 import { navigate } from '../router.js';
 import { changePassphrase, wipeVault, listBlobIds, loadBlob } from '../store.js';
+import { getThemePref, setThemePref } from '../theme.js';
 import { sealWithKey, createKeyContext, encodeJson, b64encode } from '../crypto.js';
 
 async function requestPersistentStorage() {
@@ -20,6 +21,24 @@ export async function renderSettings(container, { onLocked }) {
   clear(container);
   container.appendChild(h('button', { class: 'btn-back', onClick: () => navigate('/mas') }, '← Más'));
   container.appendChild(h('h1', null, 'Ajustes'));
+
+  // Apariencia: automático (como el móvil), día o noche
+  container.appendChild(h('h2', null, 'Apariencia'));
+  const themeGroup = h('div', { class: 'segmented', role: 'group', 'aria-label': 'Apariencia' });
+  const THEME_OPTIONS = [['auto', 'Automático'], ['light', 'Día'], ['dark', 'Noche']];
+  function renderThemeButtons() {
+    clear(themeGroup);
+    const current = getThemePref();
+    for (const [value, label] of THEME_OPTIONS) {
+      themeGroup.appendChild(
+        h('button', { type: 'button', 'aria-pressed': current === value ? 'true' : 'false', onClick: () => { setThemePref(value); renderThemeButtons(); } }, label)
+      );
+    }
+  }
+  renderThemeButtons();
+  container.appendChild(themeGroup);
+
+  container.appendChild(h('h2', null, 'Tú y el bloqueo'));
 
   // Nombre propio (para "addedBy" en documentos subidos por cada viajero)
   const nameInput = h('input', { type: 'text', maxlength: 200, value: trip.settings?.myName || '', placeholder: 'Tu nombre' });
