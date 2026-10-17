@@ -1,0 +1,9 @@
+#!/bin/sh
+# Hook de seguridad: bloquea el commit si hay sumideros peligrosos o datos reales filtrados.
+set -e
+cd "$(git rev-parse --show-toplevel)"
+echo "[pre-commit] lint-sinks..."
+node tools/lint-sinks.mjs
+echo "[pre-commit] check-no-secrets..."
+node tools/check-no-secrets.mjs
+echo "[pre-commit] OK"

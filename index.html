@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#0f172a">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' blob:; connect-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'; require-trusted-types-for 'script'; trusted-types sw">
+<title>Viaje</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icons/icon-192.png">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<link rel="stylesheet" href="./css/app.css">
+</head>
+<body>
+  <noscript>Esta aplicación necesita JavaScript para funcionar.</noscript>
+
+  <div id="hidden-cover" hidden aria-hidden="true"></div>
+
+  <div id="lock-screen" class="screen" hidden></div>
+
+  <div id="app" hidden>
+    <main id="view" class="view" tabindex="-1"></main>
+    <nav id="tabbar" class="tabbar" aria-label="Navegación principal"></nav>
+  </div>
+
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>

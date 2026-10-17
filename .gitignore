@@ -1,0 +1,13 @@
+# Nunca debe haber datos reales del viaje en este repo.
+*.tvault
+*.json
+!tests/fixtures/**/*.json
+!package.json
+!package-lock.json
+!manifest.webmanifest
+private/
+node_modules/
+test-results/
+playwright-report/
+.DS_Store
+.writetest

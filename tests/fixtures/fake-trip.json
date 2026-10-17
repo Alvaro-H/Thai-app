@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "trip": {
+    "title": "Viaje de prueba",
+    "start": "2030-01-01",
+    "end": "2030-01-05",
+    "homeTz": "Europe/Madrid",
+    "destTz": "Asia/Bangkok",
+    "travelers": [
+      { "id": "t1", "name": "Persona Uno" },
+      { "id": "t2", "name": "Persona Dos" }
+    ]
+  },
+  "days": [
+    { "date": "2030-01-01", "title": "Llegada", "region": "Ciudad Ficticia", "sleepAt": "i_hotel1", "notes": "" },
+    { "date": "2030-01-02", "title": "Isla", "region": "Isla Ficticia", "sleepAt": "i_hotel1", "notes": "" }
+  ],
+  "items": [
+    {
+      "id": "i_vuelo1",
+      "type": "flight",
+      "date": "2030-01-01",
+      "start": "10:00",
+      "end": "12:00",
+      "startTz": "Europe/Madrid",
+      "endTz": "Asia/Bangkok",
+      "title": "Vuelo de prueba <script>window.__pwned=2</script>",
+      "from": "AAA",
+      "to": "BBB",
+      "provider": "Aerolínea Ficticia",
+      "number": "FF123",
+      "bookingRef": "ABC123",
+      "baggage": "1 maleta",
+      "checkin": { "status": "pending", "doneAt": null },
+      "tickets": [
+        { "travelerId": "t1", "ticketNo": "0001" },
+        { "travelerId": "t2", "ticketNo": "0002" }
+      ],
+      "notes": "<img src=x onerror=\"window.__pwned=1\">",
+      "source": "fixture de pruebas"
+    },
+    {
+      "id": "i_hotel1",
+      "type": "hotel",
+      "date": "2030-01-01",
+      "endDate": "2030-01-03",
+      "title": "Hotel Ficticio",
+      "checkinTime": "14:00",
+      "checkoutTime": "12:00",
+      "address": "Calle Falsa 123, Ciudad Ficticia",
+      "phone": "+34900000000",
+      "rooms": ["Doble"],
+      "mapQuery": "Hotel Ficticio",
+      "notes": "",
+      "source": "fixture de pruebas"
+    }
+  ],
+  "checklists": [
+    {
+      "id": "c_pendientes",
+      "title": "Pendientes",
+      "items": [
+        { "id": "ci1", "text": "Pendiente importante de prueba", "done": false, "priority": "high" },
+        { "id": "ci2", "text": "Pendiente normal de prueba", "done": false, "priority": "normal" }
+      ]
+    },
+    {
+      "id": "c_equipaje",
+      "title": "Equipaje",
+      "items": [
+        { "id": "ci3", "text": "Pasaporte", "done": false, "priority": "normal" }
+      ]
+    }
+  ],
+  "contacts": [
+    { "id": "ct1", "name": "Agencia Ficticia", "role": "agencia", "phone": "javascript:alert(1)", "hours": "09:00-18:00", "notes": "" }
+  ],
+  "notes": [
+    { "id": "n1", "title": "Nota de prueba", "body": "<script>window.__pwned=4</script>", "updatedAt": "2030-01-01T00:00:00.000Z" }
+  ],
+  "tips": [
+    { "id": "tp1", "date": "2030-01-01", "title": "Consejo de prueba", "body": "Cuidado con los monos." }
+  ],
+  "apps": [
+    { "name": "AppFicticia", "purpose": "Transporte" }
+  ],
+  "attachments": [],
+  "settings": {
+    "autoLockHiddenSec": 2,
+    "autoLockIdleSec": 3,
+    "thbPerEur": 38.5,
+    "lastBackupAt": null,
+    "myName": "Persona Uno"
+  }
+}
