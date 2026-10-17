@@ -6,7 +6,7 @@ import { newId, nowIso } from '../ids.js';
 export function renderNotes(container) {
   const trip = getTripData();
   clear(container);
-  container.appendChild(h('button', { class: 'btn btn-small', onClick: () => navigate('/mas') }, '← Más'));
+  container.appendChild(h('button', { class: 'btn-back', onClick: () => navigate('/mas') }, '← Más'));
   container.appendChild(h('h1', null, 'Notas'));
 
   if (!trip.notes.length) container.appendChild(h('div', { class: 'empty-state' }, 'Sin notas todavía.'));
@@ -26,7 +26,7 @@ export function renderNoteEditor(container, noteId) {
   clear(container);
   const existing = noteId ? trip.notes.find((n) => n.id === noteId) : null;
 
-  container.appendChild(h('button', { class: 'btn btn-small', onClick: () => navigate('/notas') }, '← Notas'));
+  container.appendChild(h('button', { class: 'btn-back', onClick: () => navigate('/notas') }, '← Notas'));
   container.appendChild(h('h1', null, existing ? 'Editar nota' : 'Nueva nota'));
 
   const titleInput = h('input', { type: 'text', maxlength: 300, value: existing?.title || '', placeholder: 'Título' });

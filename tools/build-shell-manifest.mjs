@@ -9,7 +9,7 @@ import { join, relative, sep } from 'node:path';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 
-const SHELL_DIRS = ['css', 'js', 'icons'];
+const SHELL_DIRS = ['css', 'js', 'icons', 'fonts'];
 const SHELL_ROOT_FILES = ['index.html', 'manifest.webmanifest'];
 const EXCLUDE = new Set(['shell-manifest.js']);
 

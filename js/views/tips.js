@@ -6,7 +6,7 @@ import { formatDateShort } from '../format.js';
 export function renderTips(container) {
   const trip = getTripData();
   clear(container);
-  container.appendChild(h('button', { class: 'btn btn-small', onClick: () => navigate('/mas') }, '← Más'));
+  container.appendChild(h('button', { class: 'btn-back', onClick: () => navigate('/mas') }, '← Más'));
   container.appendChild(h('h1', null, 'Consejos'));
 
   if (!trip.tips.length) container.appendChild(h('div', { class: 'empty-state' }, 'Sin consejos todavía.'));

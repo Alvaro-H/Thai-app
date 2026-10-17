@@ -18,7 +18,7 @@ async function requestPersistentStorage() {
 export async function renderSettings(container, { onLocked }) {
   const trip = getTripData();
   clear(container);
-  container.appendChild(h('button', { class: 'btn btn-small', onClick: () => navigate('/mas') }, '← Más'));
+  container.appendChild(h('button', { class: 'btn-back', onClick: () => navigate('/mas') }, '← Más'));
   container.appendChild(h('h1', null, 'Ajustes'));
 
   // Nombre propio (para "addedBy" en documentos subidos por cada viajero)

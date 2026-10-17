@@ -1,11 +1,22 @@
 // GENERADO por tools/build-shell-manifest.mjs — no editar a mano.
-export const CACHE_VERSION = "shell-1ead032efee0e46f";
+export const CACHE_VERSION = "shell-e086c81ec7205a61";
 export const SHELL_FILES = [
   "./css/app.css",
+  "./fonts/OFL-Kanit.txt",
+  "./fonts/kanit-latin-500-normal.woff2",
+  "./fonts/kanit-latin-600-normal.woff2",
+  "./fonts/kanit-thai-500-normal.woff2",
+  "./fonts/kanit-thai-600-normal.woff2",
+  "./icons/boat.svg",
   "./icons/icon-192.png",
   "./icons/icon-512-maskable.png",
   "./icons/icon-512.png",
-  "./icons/leaf.svg",
+  "./icons/palm.svg",
+  "./icons/tab-hoy.svg",
+  "./icons/tab-itinerario.svg",
+  "./icons/tab-listas.svg",
+  "./icons/tab-mas.svg",
+  "./icons/tab-reservas.svg",
   "./icons/wave.svg",
   "./index.html",
   "./js/crypto.js",
@@ -16,6 +27,7 @@ export const SHELL_FILES = [
   "./js/lock.js",
   "./js/main.js",
   "./js/router.js",
+  "./js/scene.js",
   "./js/schema.js",
   "./js/seal.js",
   "./js/session.js",

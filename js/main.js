@@ -5,6 +5,7 @@ import { initAutoLock, resetIdleTimer } from './lock.js';
 import { hasVault, createVault, unlockVault, replaceVault } from './store.js';
 import { openEnvelope, decodeJson, b64decode } from './crypto.js';
 import { getSwPolicy } from './tt-policy.js';
+import { scene } from './scene.js';
 
 import { renderToday } from './views/today.js';
 import { renderItinerary, renderDay } from './views/itinerary.js';
@@ -26,11 +27,11 @@ const hiddenCoverEl = document.getElementById('hidden-cover');
 const tabbarEl = document.getElementById('tabbar');
 
 const TABS = [
-  { path: '/hoy', label: 'Hoy' },
-  { path: '/itinerario', label: 'Itinerario' },
-  { path: '/reservas/vuelos', label: 'Reservas' },
-  { path: '/listas', label: 'Listas' },
-  { path: '/mas', label: 'Más' },
+  { path: '/hoy', label: 'Hoy', icon: 'hoy' },
+  { path: '/itinerario', label: 'Itinerario', icon: 'itinerario' },
+  { path: '/reservas/vuelos', label: 'Reservas', icon: 'reservas' },
+  { path: '/listas', label: 'Listas', icon: 'listas' },
+  { path: '/mas', label: 'Más', icon: 'mas' },
 ];
 
 let vaultExistsCache = false;
@@ -41,7 +42,14 @@ function renderTabbar() {
   for (const tab of TABS) {
     const tabRoot = '/' + tab.path.split('/')[1];
     const isActive = current.startsWith(tabRoot);
-    tabbarEl.appendChild(h('button', { 'aria-current': isActive, onClick: () => navigate(tab.path) }, tab.label));
+    tabbarEl.appendChild(
+      h(
+        'button',
+        { 'aria-current': isActive ? 'page' : false, dataset: { tab: tab.icon }, onClick: () => navigate(tab.path) },
+        h('span', { class: 'tab-icon', 'aria-hidden': 'true' }),
+        h('span', { class: 'tab-label' }, tab.label)
+      )
+    );
   }
 }
 
@@ -109,6 +117,7 @@ function showLockScreen(renderFn) {
   appEl.hidden = true;
   lockScreenEl.hidden = false;
   clear(lockScreenEl);
+  lockScreenEl.appendChild(scene('compact'));
   lockScreenEl.appendChild(renderFn());
 }
 

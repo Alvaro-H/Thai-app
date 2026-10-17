@@ -6,7 +6,7 @@ import { thbToEur, eurToThb } from '../format.js';
 export function renderConverter(container) {
   const trip = getTripData();
   clear(container);
-  container.appendChild(h('button', { class: 'btn btn-small', onClick: () => navigate('/mas') }, '← Más'));
+  container.appendChild(h('button', { class: 'btn-back', onClick: () => navigate('/mas') }, '← Más'));
   container.appendChild(h('h1', null, 'Conversor THB ↔ EUR'));
   container.appendChild(h('p', { class: 'card-sub' }, 'Sin conexión a internet: introduce tú mismo el tipo de cambio aproximado.'));
 

@@ -4,6 +4,7 @@ import { saveBlob, loadBlob } from '../store.js';
 import { navigate } from '../router.js';
 import { ITEM_TYPE_LABELS, fieldsForType, FIELD_LABELS } from '../fields.js';
 import { newId, nowIso } from '../ids.js';
+import { formatDateShort } from '../format.js';
 
 const TABS = [
   { key: 'vuelos', label: 'Vuelos', types: ['flight'] },
@@ -19,7 +20,7 @@ export function renderBookings(container, tabKey) {
 
   const strip = h('div', { class: 'tabs-strip' });
   for (const tab of TABS) {
-    strip.appendChild(h('button', { 'aria-current': tab.key === tabKey, onClick: () => navigate('/reservas/' + tab.key) }, tab.label));
+    strip.appendChild(h('button', { 'aria-current': tab.key === tabKey ? 'true' : false, onClick: () => navigate('/reservas/' + tab.key) }, tab.label));
   }
   container.appendChild(strip);
 
@@ -44,7 +45,7 @@ export function renderBookings(container, tabKey) {
 }
 
 function renderItemCard(item) {
-  const sub = [item.date, item.start, item.from && item.to ? item.from + ' → ' + item.to : null].filter(Boolean).join(' · ');
+  const sub = [item.date ? formatDateShort(item.date) : null, item.start, item.from && item.to ? item.from + ' → ' + item.to : null].filter(Boolean).join(' · ');
   const card = h(
     'div',
     { class: 'card', onClick: () => navigate('/item/' + item.id) },
@@ -67,9 +68,9 @@ export async function renderItemDetail(container, itemId) {
   }
 
   const backTab = backTabFor(item.type);
-  container.appendChild(h('button', { class: 'btn btn-small', onClick: () => navigate('/reservas/' + backTab) }, '← Reservas'));
+  container.appendChild(h('button', { class: 'btn-back', onClick: () => navigate('/reservas/' + backTab) }, '← Reservas'));
   container.appendChild(h('h1', null, item.title));
-  container.appendChild(h('p', { class: 'card-sub' }, ITEM_TYPE_LABELS[item.type] + ' · ' + item.date));
+  container.appendChild(h('p', { class: 'card-sub' }, ITEM_TYPE_LABELS[item.type] + (item.date ? ', ' + formatDateShort(item.date) : '')));
 
   if (item.type === 'flight') {
     container.appendChild(renderFlightDetail(item));
@@ -158,7 +159,7 @@ function renderHotelDetail(item) {
     h(
       'div',
       { class: 'card' },
-      h('div', { class: 'row-between' }, h('div', null, h('div', { class: 'card-sub' }, 'Entrada'), h('div', { class: 'card-title' }, (item.date || '') + (item.checkinTime ? ' ' + item.checkinTime : ''))), h('div', null, h('div', { class: 'card-sub' }, 'Salida'), h('div', { class: 'card-title' }, (item.endDate || '') + (item.checkoutTime ? ' ' + item.checkoutTime : '')))),
+      h('div', { class: 'row-between' }, h('div', null, h('div', { class: 'card-sub' }, 'Entrada'), h('div', { class: 'card-title' }, (item.date ? formatDateShort(item.date) : '') + (item.checkinTime ? ' ' + item.checkinTime : ''))), h('div', null, h('div', { class: 'card-sub' }, 'Salida'), h('div', { class: 'card-title' }, (item.endDate ? formatDateShort(item.endDate) : '') + (item.checkoutTime ? ' ' + item.checkoutTime : '')))),
       item.address ? h('div', { class: 'card-sub' }, item.address) : null,
       item.rooms && item.rooms.length ? h('div', { class: 'card-sub' }, item.rooms.join(' · ')) : null,
       item.phone ? h('a', { href: safeUrl('tel:' + item.phone) }, 'Llamar: ' + item.phone) : null

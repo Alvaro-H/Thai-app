@@ -49,7 +49,7 @@ test('el itinerario muestra los días y permite abrir el detalle de un día', as
   await expectUnlocked(page);
   await page.evaluate(() => { location.hash = '#/itinerario'; });
   await page.waitForTimeout(150);
-  await page.click('.card:has-text("Llegada")');
+  await page.click('.day-card:has-text("Llegada")');
   await expect(page.locator('h1')).toContainText('de enero');
 });
 

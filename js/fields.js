@@ -10,6 +10,19 @@ export const ITEM_TYPE_LABELS = {
   place: 'Lugar',
 };
 
+const ON_BOARD = { flight: 'vuelo', boat: 'barco', transfer: 'traslado' };
+
+// Dónde se pasa la noche de un día. Si sleepAt apunta a un transporte (p.ej.
+// un vuelo nocturno), se dice "a bordo" para que el título del trayecto
+// ("Madrid → Bangkok") no se lea como si se durmiera en el destino.
+export function describeNight(trip, day) {
+  if (!day || !day.sleepAt) return null;
+  const item = trip.items.find((i) => i.id === day.sleepAt);
+  if (!item) return { label: 'Duermes en', place: day.sleepAt };
+  if (ON_BOARD[item.type]) return { label: 'Noche a bordo', place: ON_BOARD[item.type] + ' ' + item.title, item };
+  return { label: 'Duermes en', place: item.title, item };
+}
+
 const COMMON = ['title', 'date', 'start', 'end', 'startTz', 'endTz', 'notes'];
 
 export const ITEM_FIELDS = {

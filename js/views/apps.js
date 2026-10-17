@@ -5,7 +5,7 @@ import { navigate } from '../router.js';
 export function renderApps(container) {
   const trip = getTripData();
   clear(container);
-  container.appendChild(h('button', { class: 'btn btn-small', onClick: () => navigate('/mas') }, '← Más'));
+  container.appendChild(h('button', { class: 'btn-back', onClick: () => navigate('/mas') }, '← Más'));
   container.appendChild(h('h1', null, 'Apps útiles'));
 
   if (!trip.apps.length) container.appendChild(h('div', { class: 'empty-state' }, 'Sin apps listadas.'));

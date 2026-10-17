@@ -2,7 +2,10 @@ import { h, clear } from '../dom.js';
 import { getTripData } from '../session.js';
 import { navigate } from '../router.js';
 import { formatDateLong, zonedTimeToUtc, nowInZone, relativeCountdown, formatTimeInZone } from '../format.js';
-import { ITEM_TYPE_LABELS } from '../fields.js';
+import { ITEM_TYPE_LABELS, describeNight } from '../fields.js';
+import { scene } from '../scene.js';
+
+const DAY_MS = 86400000;
 
 function nextUpcomingItem(trip, destTz) {
   const now = Date.now();
@@ -17,11 +20,33 @@ function nextUpcomingItem(trip, destTz) {
   return best;
 }
 
-function sleepLocationFor(trip, dateStr) {
-  const day = trip.days.find((d) => d.date === dateStr);
-  if (!day || !day.sleepAt) return null;
-  const item = trip.items.find((i) => i.id === day.sleepAt);
-  return item ? item.title : day.sleepAt;
+// Días de calendario entre dos fechas AAAA-MM-DD (sin zonas horarias de por medio).
+function daysBetween(a, b) {
+  return Math.round((Date.UTC(...ymd(b)) - Date.UTC(...ymd(a))) / DAY_MS);
+}
+function ymd(s) {
+  const [y, m, d] = s.split('-').map(Number);
+  return [y, m - 1, d];
+}
+
+function heroLines(trip, todayDest, destTz) {
+  const { start, end } = trip.trip;
+  if (start && todayDest < start) {
+    const n = daysBetween(todayDest, start);
+    const headline = n === 1 ? 'Mañana empieza el viaje' : `Faltan ${n} días`;
+    return [headline, 'Salida el ' + formatDateLong(start)];
+  }
+  if (end && todayDest > end) {
+    return ['De vuelta en casa', 'Ojalá haya sido un viaje para recordar'];
+  }
+  if (start && end) {
+    const dayN = daysBetween(start, todayDest) + 1;
+    const total = daysBetween(start, end) + 1;
+    const day = trip.days.find((d) => d.date === todayDest);
+    const where = day && day.region ? `, en ${day.region}` : '';
+    return [`Día ${dayN} de ${total}${where}`, formatDateLong(todayDest)];
+  }
+  return [formatDateLong(todayDest), ''];
 }
 
 export function renderToday(container) {
@@ -31,58 +56,57 @@ export function renderToday(container) {
   const destTz = trip.trip.destTz || 'Asia/Bangkok';
   const homeTz = trip.trip.homeTz || 'Europe/Madrid';
   const { date: todayDest } = nowInZone(destTz);
+  const [headline, subline] = heroLines(trip, todayDest, destTz);
 
-  container.appendChild(h('h1', null, trip.trip.title || 'Hoy'));
-
-  const clocksCard = h(
-    'div',
-    { class: 'card row-between' },
-    h('div', null, h('div', { class: 'card-sub' }, 'Madrid'), h('div', { class: 'card-title' }, formatTimeInZone(new Date(), homeTz))),
-    h('div', null, h('div', { class: 'card-sub' }, 'Tailandia'), h('div', { class: 'card-title' }, formatTimeInZone(new Date(), destTz)))
+  container.appendChild(
+    scene(
+      'hero',
+      h('p', { class: 'scene-greeting', lang: 'th' }, 'สวัสดี'),
+      h('h1', { class: 'scene-title' }, trip.trip.title || 'Tailandia'),
+      h('p', { class: 'scene-headline' }, headline),
+      subline ? h('p', { class: 'scene-subline' }, subline) : null
+    )
   );
-  container.appendChild(clocksCard);
 
-  const start = trip.trip.start;
-  const end = trip.trip.end;
-  const started = start && todayDest >= start;
-  const ended = end && todayDest > end;
+  container.appendChild(
+    h(
+      'div',
+      { class: 'clocks' },
+      h('div', { class: 'clock' }, h('span', { class: 'clock-city' }, 'Madrid'), h('span', { class: 'clock-time' }, formatTimeInZone(new Date(), homeTz))),
+      h('div', { class: 'clock clock-dest' }, h('span', { class: 'clock-city' }, 'Tailandia'), h('span', { class: 'clock-time' }, formatTimeInZone(new Date(), destTz)))
+    )
+  );
 
-  if (!started && start) {
-    const startAt = zonedTimeToUtc(start, '00:00', destTz);
-    const { label } = relativeCountdown(startAt);
-    container.appendChild(
-      h('div', { class: 'card' }, h('div', { class: 'card-sub' }, 'Faltan'), h('div', { class: 'card-title' }, label, ' para el viaje'))
-    );
-  } else if (ended) {
-    container.appendChild(h('div', { class: 'card' }, h('div', { class: 'card-title' }, 'El viaje ha terminado'), h('p', { class: 'card-sub' }, '¡Esperamos que lo hayáis disfrutado!')));
-  } else {
-    container.appendChild(h('h2', null, formatDateLong(todayDest)));
+  const { start, end } = trip.trip;
+  const onTrip = start && end && todayDest >= start && todayDest <= end;
 
-    const sleepAt = sleepLocationFor(trip, todayDest);
-    if (sleepAt) {
-      container.appendChild(h('div', { class: 'card' }, h('div', { class: 'card-sub' }, 'Esta noche duermes en'), h('div', { class: 'card-title' }, sleepAt)));
-    }
-
-    const next = nextUpcomingItem(trip, destTz);
-    if (next) {
-      const { label } = relativeCountdown(next.at);
+  if (onTrip) {
+    const night = describeNight(trip, trip.days.find((d) => d.date === todayDest));
+    if (night) {
       container.appendChild(
-        h(
-          'div',
-          { class: 'card', onClick: () => navigate('/item/' + next.item.id) },
-          h('div', { class: 'card-sub' }, 'Próximo · ' + (ITEM_TYPE_LABELS[next.item.type] || '')),
-          h('div', { class: 'card-title' }, next.item.title),
-          h('div', { class: 'card-sub' }, 'en ' + label)
-        )
+        h('div', { class: 'card card-night' }, h('div', { class: 'card-sub' }, night.label === 'Duermes en' ? 'Esta noche duermes en' : 'Esta noche, a bordo'), h('div', { class: 'card-title' }, night.place))
       );
     }
+  }
+
+  const next = nextUpcomingItem(trip, destTz);
+  if (next && (onTrip || (start && daysBetween(todayDest, start) <= 2))) {
+    const { label } = relativeCountdown(next.at);
+    container.appendChild(
+      h(
+        'div',
+        { class: 'card card-next', role: 'button', tabindex: 0, onClick: () => navigate('/item/' + next.item.id) },
+        h('div', { class: 'card-sub' }, 'Lo siguiente: ' + (ITEM_TYPE_LABELS[next.item.type] || '').toLowerCase() + ', en ' + label),
+        h('div', { class: 'card-title' }, next.item.title)
+      )
+    );
   }
 
   const pendingList = trip.checklists.find((c) => c.id === 'c_pendientes') || trip.checklists[0];
   const highPending = pendingList ? pendingList.items.filter((i) => !i.done && i.priority === 'high') : [];
   if (highPending.length) {
-    container.appendChild(h('h2', null, 'Pendientes importantes'));
-    const ul = h('ul', { class: 'list-plain' });
+    container.appendChild(h('h2', null, onTrip ? 'Pendiente' : 'Antes de salir'));
+    const ul = h('ul', { class: 'list-plain pending-list' });
     for (const it of highPending) {
       ul.appendChild(h('li', null, h('span', { class: 'pill pill-pending' }, '!'), ' ', it.text));
     }
